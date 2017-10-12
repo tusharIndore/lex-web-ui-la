@@ -4,15 +4,15 @@
   },
   "lex": {
     "botName": "",
-    "initialText": "You can ask me for help ordering flowers. Just type \"Buy flowers\" or click on the mic and say it.",
-    "initialSpeechInstruction": "Say 'Buy Flowers' to get started."
+    "initialText": "Welcome. Just type \"Check Points\" or click on the mic and say it.",
+    "initialSpeechInstruction": "Welcome .Say 'Check points' to get started."
   },
   "polly": {
     "voiceId": "Salli"
   },
   "ui": {
     "parentOrigin": "",
-    "toolbarTitle": "Order Flowers"
+    "toolbarTitle": "Customer Information Bot"
   },
   "recorder": {
     "preset": "speech_recognition"
