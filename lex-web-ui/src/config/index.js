@@ -66,8 +66,8 @@ const configDefault = {
     botAlias: '$LATEST',
 
     // instruction message shown in the UI
-    initialText: 'You can ask me for help ordering flowers. ' +
-      'Just type "order flowers" or click on the mic and say it.',
+    initialText: 'You can ask me for help index index. ' +
+      'Just type "order flowers" or click on the mic and index.',
 
     // instructions spoken when mic is clicked
     initialSpeechInstruction: 'Say "Order Flowers" to get started',
@@ -129,7 +129,7 @@ const configDefault = {
     toolbarColor: 'red',
 
     // chat window title
-    toolbarTitle: 'Order Flowers',
+    toolbarTitle: 'Order Flowers index',
 
     // logo used in toolbar - also used as favicon not specificied
     toolbarLogo: '',
