@@ -33,7 +33,7 @@ Parameters:
             Prefix to add to Lex resource names when using the sample bot.
             Ignored if you provide your own bot. Must conform to the
             permitted Lex Bot name syntax (alpha characters).
-        Default: WebUi
+        Default: WebUiabc
         MinLength: 3
         MaxLength: 32
         AllowedPattern: '^[a-zA-Z\._]+$'
