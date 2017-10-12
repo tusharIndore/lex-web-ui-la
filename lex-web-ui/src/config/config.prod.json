@@ -4,8 +4,8 @@
   },
   "lex": {
     "botName": "WebUiOrderFlowers",
-    "initialText": " Prod You can ask me for help ordering flowers. Just type \"order flowers\" or click on the mic and say it. Prod",
-    "initialSpeechInstruction": "Say 'Order Flowers' to get started."
+    "initialText": " You can ask me for help. Just type \"check customer points\" or click on the mic and say it.",
+    "initialSpeechInstruction": "Say 'check customer points' to get started."
   },
   "polly": {
     "voiceId": "Salli"
@@ -13,7 +13,7 @@
   "ui": {
     "parentOrigin": "",
     "pageTitle": "Order Flowers Bot",
-    "toolbarTitle": "Order Flowers Prod"
+    "toolbarTitle": "Customer Information Bot"
   },
   "recorder": {
     "preset": "speech_recognition"
