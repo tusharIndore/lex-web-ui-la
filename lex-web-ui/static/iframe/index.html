@@ -72,15 +72,39 @@
           // this config object should be a valid aws-lex-webui configuration
           // values here will override the ones in the JSON config
           //      coords: 'welcome tushar',
+          var coords = '';
+          
+           var options = {
+           timeout: 10000
+           }
+
+      // browser prompts for permission
+        navigator.geolocation.getCurrentPosition(
+        getPositionCallBack,
+        reject,
+        options
+      );
+
+      function getPositionCallBack(position) {       
+        try {
+          coords = {
+            lat: position.coords.latitude,
+            long: position.coords.longitude
+          };
+        } catch (err) {
+       coords = {
+            lat: null,
+            long: null
+          };
+        }
+      }    
+          
           var config = {
             iframeConfig: {
               lex: {
                 sessionAttributes: {
                   userAgent: navigator.userAgent,
-                  coords : {
-                  lat: position.coords.latitude,
-                  long: position.coords.longitude
-                  },
+                  coords: JSON.stringify(coords),
                 },
               },
             },
