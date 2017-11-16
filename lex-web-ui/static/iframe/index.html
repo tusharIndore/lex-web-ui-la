@@ -47,6 +47,73 @@
     <!-- showdown -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.7.0/showdown.min.js" integrity="sha256-b6udMbIGssus868pU3FoNH7tsjSHeulsT+hoDrzBhuI=" crossorigin="anonymous"></script>
 
+    <!-- LexWebUi loader -->
+<script src="./chatbot-ui-loader.js"></script>
+<script>
+  var lexWebUiLoader = new LexWebUiLoader();
+
+  getCoordinates()
+    .then(
+      function onCoordinatesResolved(coords) {
+        console.info('coordinates', coords);
+        return coords;
+      },
+      function onCoordinatesRejected(err) {
+        console.warn('failed to obtain coordinates - ', err);
+        return { lat: null, long: null };
+      }
+    )
+    .then(function loadLexWebUi(coords) {
+      // you may need to merge the lex config here
+      lexWebUiLoader.load({
+        lex: {
+          botName: 'WebUiFullOhElevenOhOrderFlowers',
+          sessionAttributes: {
+            coords: JSON.stringify(coords)
+          }
+        }
+      });
+    })
+    .catch(function (err) {
+      console.error('error: ', err);
+    });
+
+  function getCoordinates() {
+    return new Promise(function (resolve, reject) {
+      if (!('geolocation' in navigator) ||
+        !('getCurrentPosition' in navigator.geolocation)
+      ) {
+        return Promise.reject(
+          new Error('geolocation API not available')
+        );
+      }
+      var options = {
+        timeout: 10000
+      }
+
+      // browser prompts for permission
+      navigator.geolocation.getCurrentPosition(
+        getPositionCallBack,
+        reject,
+        options
+      );
+
+      function getPositionCallBack(position) {
+        var coords = '';
+        try {
+          coords = {
+            lat: position.coords.latitude,
+            long: position.coords.longitude
+          };
+        } catch (err) {
+          return reject(err);
+        }
+        return resolve(coords);
+      }
+    });
+  }
+</script>
+    
     <!-- chatbot ui bot event handler -->
     <script>
       $(document).ready(function chatbotHandler() {
@@ -72,39 +139,12 @@
           // this config object should be a valid aws-lex-webui configuration
           // values here will override the ones in the JSON config
           //      coords: 'welcome tushar',
-          var coords = '';
-          
-           var options = {
-           timeout: 10000
-           }
-
-      // browser prompts for permission
-        navigator.geolocation.getCurrentPosition(
-        getPositionCallBack,
-        reject,
-        options
-      );
-
-      function getPositionCallBack(position) {       
-        try {
-          coords = {
-            lat: position.coords.latitude,
-            long: position.coords.longitude
-          };
-        } catch (err) {
-       coords = {
-            lat: null,
-            long: null
-          };
-        }
-      }    
           
           var config = {
             iframeConfig: {
               lex: {
                 sessionAttributes: {
                   userAgent: navigator.userAgent,
-                  coords: JSON.stringify(coords),
                 },
               },
             },
