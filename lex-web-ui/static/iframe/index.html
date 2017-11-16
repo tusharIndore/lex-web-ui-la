@@ -48,9 +48,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.7.0/showdown.min.js" integrity="sha256-b6udMbIGssus868pU3FoNH7tsjSHeulsT+hoDrzBhuI=" crossorigin="anonymous"></script>
 
     <!-- LexWebUi loader -->
-<script src="./chatbot-ui-loader.js"></script>
-<script>
-  var lexWebUiLoader = new LexWebUiLoader();
+    <script src="./chatbot-ui-loader.js"></script>
+    <!-- chatbot ui bot event handler -->
+    <script>
+      
+       var lexWebUiLoader = new LexWebUiLoader();
 
   getCoordinates()
     .then(
@@ -112,10 +114,6 @@
       }
     });
   }
-</script>
-    
-    <!-- chatbot ui bot event handler -->
-    <script>
       $(document).ready(function chatbotHandler() {
         // load README.md and convert it to HTML
         $.get('./README.md', function getReadme(data) {
