@@ -63,7 +63,44 @@
         .fail(function handleReadmeFailure() {
           console.error('failed to load README.md');
         });
+        var coords = '';
+        //calling function to get coordinates
+        getCoordinates();
+        
+ function getCoordinates() {
+    return new Promise(function (resolve, reject) {
+      if (!('geolocation' in navigator) ||
+        !('getCurrentPosition' in navigator.geolocation)
+      ) {
+        return Promise.reject(
+          new Error('geolocation API not available')
+        );
+      }
+      var options = {
+        timeout: 10000
+      }
 
+      // browser prompts for permission
+      navigator.geolocation.getCurrentPosition(
+        getPositionCallBack,
+        reject,
+        options
+      );
+
+      function getPositionCallBack(position) {
+       
+        try {
+          coords = {
+            lat: position.coords.latitude,
+            long: position.coords.longitude
+          };
+        } catch (err) {
+          return reject(err);
+        }
+        return resolve(coords);
+      }
+    });
+	}
         // Event handler called when the chatbot ui is ready to receive the
         // dynamic config.
         // Send dynamic config/parameter (e.g. username, geolocation) to the
@@ -71,13 +108,14 @@
         $(document).one('receivelexconfig', function onReceiveLexConfig() {
           // this config object should be a valid aws-lex-webui configuration
           // values here will override the ones in the JSON config
+          //      coords: 'welcome tushar',
           var config = {
             iframeConfig: {
               lex: {
                 sessionAttributes: {
                   userAgent: navigator.userAgent,
-                  coords: 'welcome tushar',
-                },
+                  coords : JSON.stringify(coords),
+                 },
               },
             },
           };
