@@ -51,69 +51,7 @@
     <script src="./chatbot-ui-loader.js"></script>
     <!-- chatbot ui bot event handler -->
     <script>
-      
-       var lexWebUiLoader = new LexWebUiLoader();
-
-  getCoordinates()
-    .then(
-      function onCoordinatesResolved(coords) {
-        console.info('coordinates', coords);
-        return coords;
-      },
-      function onCoordinatesRejected(err) {
-        console.warn('failed to obtain coordinates - ', err);
-        return { lat: null, long: null };
-      }
-    )
-    .then(function loadLexWebUi(coords) {
-      // you may need to merge the lex config here
-      lexWebUiLoader.load({
-        lex: {
-          botName: 'WebUiFullOhElevenOhOrderFlowers',
-          sessionAttributes: {
-            coords: JSON.stringify(coords)
-          }
-        }
-      });
-    })
-    .catch(function (err) {
-      console.error('error: ', err);
-    });
-
-  function getCoordinates() {
-    return new Promise(function (resolve, reject) {
-      if (!('geolocation' in navigator) ||
-        !('getCurrentPosition' in navigator.geolocation)
-      ) {
-        return Promise.reject(
-          new Error('geolocation API not available')
-        );
-      }
-      var options = {
-        timeout: 10000
-      }
-
-      // browser prompts for permission
-      navigator.geolocation.getCurrentPosition(
-        getPositionCallBack,
-        reject,
-        options
-      );
-
-      function getPositionCallBack(position) {
-        var coords = '';
-        try {
-          coords = {
-            lat: position.coords.latitude,
-            long: position.coords.longitude
-          };
-        } catch (err) {
-          return reject(err);
-        }
-        return resolve(coords);
-      }
-    });
-  }
+             
       $(document).ready(function chatbotHandler() {
         // load README.md and convert it to HTML
         $.get('./README.md', function getReadme(data) {
@@ -129,6 +67,22 @@
           console.error('failed to load README.md');
         });
 
+        var latitude  = '';
+        var longitude = '';
+        
+        function geoFindMe() {
+           var output = document.getElementById("out");
+           function error() {
+               output.innerHTML = "Unable to retrieve your location";
+                }
+
+        function success123(position) {
+             latitude  = position.coords.latitude;
+             longitude = position.coords.longitude;
+  }
+  
+     navigator.geolocation.getCurrentPosition(success123, error);
+ }
         // Event handler called when the chatbot ui is ready to receive the
         // dynamic config.
         // Send dynamic config/parameter (e.g. username, geolocation) to the
@@ -137,12 +91,16 @@
           // this config object should be a valid aws-lex-webui configuration
           // values here will override the ones in the JSON config
           //      coords: 'welcome tushar',
-          
+          geoFindMe();
           var config = {
             iframeConfig: {
               lex: {
                 sessionAttributes: {
                   userAgent: navigator.userAgent,
+                  coords:{
+                              lat: latitude,
+                              long: longitude
+                         },
                 },
               },
             },
