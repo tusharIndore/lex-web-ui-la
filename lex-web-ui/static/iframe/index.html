@@ -72,15 +72,23 @@
        // var latitude  = '';
        // var longitude = '';
         
-        var coordi = { "lat" : "null","long" : "null"};
-        
-        function geoFindMe() {
+        // Event handler called when the chatbot ui is ready to receive the
+        // dynamic config.
+        // Send dynamic config/parameter (e.g. username, geolocation) to the
+        // chatbot ui from here
+        $(document).one('receivelexconfig', function onReceiveLexConfig() {
+          // this config object should be a valid aws-lex-webui configuration
+          // values here will override the ones in the JSON config
+          //      coords: 'welcome tushar',
+   function geoFindMe() {
            var output = document.getElementById("out");
            function error() {
+               var coordi = { "lat" : "null","long" : "null"};
                output.innerHTML = "Unable to retrieve your location";
+               return coordi;
                 }
 
-        function success123(position) {
+           function success123(position) {
             // latitude  = position.coords.latitude;
             // longitude = position.coords.longitude;
           		var lat = '';
@@ -91,21 +99,17 @@
               document.getElementById("lat").innerHTML = lat ;
               document.getElementById("lng").innerHTML = position.coords.longitude;
 		          
-               coordi = { "lat" : lat,"long" : lng};
+               var coordi = { "lat" : lat,"long" : lng};
+               return coordi;
              }
   
-           navigator.geolocation.getCurrentPosition(success123, error);
-        }
-        // Event handler called when the chatbot ui is ready to receive the
-        // dynamic config.
-        // Send dynamic config/parameter (e.g. username, geolocation) to the
-        // chatbot ui from here
-        $(document).one('receivelexconfig', function onReceiveLexConfig() {
-          // this config object should be a valid aws-lex-webui configuration
-          // values here will override the ones in the JSON config
-          //      coords: 'welcome tushar',
-          geoFindMe();
-          var myJSON = JSON.stringify(coordi);
+         var coordi=navigator.geolocation.getCurrentPosition(success123, error);
+         return coordi;     
+   } 
+          
+                   
+          var cordi = geoFindMe();
+          var myJSON = JSON.stringify(cordi);
           document.getElementById("demo").innerHTML = myJSON ;
           var config = {
             iframeConfig: {
