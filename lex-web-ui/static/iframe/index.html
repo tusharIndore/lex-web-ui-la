@@ -80,43 +80,18 @@
           // this config object should be a valid aws-lex-webui configuration
           // values here will override the ones in the JSON config
           //      coords: 'welcome tushar',
-   function geoFindMe() {
-           var output = document.getElementById("out");
-           function error() {
-               var coordi = { "lat" : "null","long" : "null"};
-               output.innerHTML = "Unable to retrieve your location";
-               return coordi;
-                }
-
-           function success123(position) {
-            // latitude  = position.coords.latitude;
-            // longitude = position.coords.longitude;
-          		var lat = '';
-		          var lng = '';
-              lat  = position.coords.latitude;
-              lng = position.coords.longitude;
-              
-              document.getElementById("lat").innerHTML = lat ;
-              document.getElementById("lng").innerHTML = position.coords.longitude;
-		          
-               var coordi = { "lat" : lat,"long" : lng};
-               return coordi;
-             }
-  
-         var coordi=navigator.geolocation.getCurrentPosition(success123, error);
-         return coordi;     
-   } 
-          
-                   
-          var cordi = geoFindMe();
-          var myJSON = JSON.stringify(cordi);
-          document.getElementById("demo").innerHTML = myJSON ;
-          var config = {
+  getCoordinates()
+    .then(
+      function onCoordinatesResolved(coords) {
+        console.info('coordinates', coords);
+	    	var test = JSON.stringify(coords);
+		    document.getElementById("demo").innerHTML = test;
+              var config = {
             iframeConfig: {
               lex: {
                 sessionAttributes: {
                   userAgent: navigator.userAgent,
-                  coords: myJSON                         
+                  coords: test                         
                 },
               },
             },
@@ -125,8 +100,84 @@
           // emit bot config event
           // jquery can't trigger native events so use vanilla JS
           var event = new CustomEvent('loadlexconfig', { detail: { config: config } });
-          document.dispatchEvent(event);
-        });
+          document.dispatchEvent(event);        
+        return coords;
+      },
+      function onCoordinatesRejected(err) {
+        console.warn('failed to obtain coordinates - ', err);
+          var config = {
+            iframeConfig: {
+              lex: {
+                sessionAttributes: {
+                  userAgent: navigator.userAgent,
+                  coords: { lat: null, lng: null }                        
+                },
+              },
+            },
+          };
+
+          // emit bot config event
+          // jquery can't trigger native events so use vanilla JS
+          var event = new CustomEvent('loadlexconfig', { detail: { config: config } });
+          document.dispatchEvent(event); 
+        return { lat: null, lng: null };
+      }
+    ).catch(function (err) {
+      var config = {
+            iframeConfig: {
+              lex: {
+                sessionAttributes: {
+                  userAgent: navigator.userAgent,
+                  coords: { lat: null, lng: null }                        
+                },
+              },
+            },
+          };
+
+          // emit bot config event
+          // jquery can't trigger native events so use vanilla JS
+          var event = new CustomEvent('loadlexconfig', { detail: { config: config } });
+          document.dispatchEvent(event); 
+      console.error('error: ', err);
+    });
+
+  function getCoordinates() {
+    return new Promise(function (resolve, reject) {
+      if (!('geolocation' in navigator) ||
+        !('getCurrentPosition' in navigator.geolocation)
+      ) {
+        return Promise.reject(
+          new Error('geolocation API not available')
+        );
+      }
+      var options = {
+        timeout: 10000
+      }
+
+      // browser prompts for permission
+      navigator.geolocation.getCurrentPosition(
+        getPositionCallBack,
+        reject,
+        options
+      );
+
+      function getPositionCallBack(position) {
+        var coords = '';
+        document.getElementById("lat").innerHTML = position.coords.latitude ;
+        try {
+          coords = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+         document.getElementById("lng").innerHTML = position.coords.longitude ; 
+        } catch (err) {
+          return reject(err);
+        }
+        return resolve(coords);
+      }
+    });
+  }
+ });
 
         $(document).on('lexWebUiReady', function onUpdateLexState(evt) {
           var event = new CustomEvent(
