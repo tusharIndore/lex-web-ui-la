@@ -39,6 +39,9 @@
     </div><!-- main container -->
      <p id="demo"></p>	 
      <p id="out"></p>
+     <h6>latitude and longitude are </h6>
+     <p id="lat"></p>
+     <p id="lng"></p>
     <!-- loader script -->
     <script src="./bot-loader.js"></script>
     <!-- jquery -->
@@ -81,10 +84,14 @@
             // latitude  = position.coords.latitude;
             // longitude = position.coords.longitude;
           		var lat = '';
-		          var long = '';
+		          var lng = '';
               lat  = position.coords.latitude;
-              long = position.coords.longitude;
-		          coordi = { "lat" : lat,"long" : long};
+              lng = position.coords.longitude;
+              
+              document.getElementById("lat").innerHTML = lat ;
+              document.getElementById("lng").innerHTML = position.coords.longitude;
+		          
+               coordi = { "lat" : lat,"long" : lng};
              }
   
            navigator.geolocation.getCurrentPosition(success123, error);
