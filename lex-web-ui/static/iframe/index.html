@@ -37,7 +37,8 @@
       </div>
 
     </div><!-- main container -->
-
+     <p id="demo"></p>	 
+     <p id="out"></p>
     <!-- loader script -->
     <script src="./bot-loader.js"></script>
     <!-- jquery -->
@@ -65,8 +66,10 @@
           console.error('failed to load README.md');
         });
 
-        var latitude  = '';
-        var longitude = '';
+       // var latitude  = '';
+       // var longitude = '';
+        
+        var coordi = { "lat" : "null","long" : "null"};
         
         function geoFindMe() {
            var output = document.getElementById("out");
@@ -75,12 +78,17 @@
                 }
 
         function success123(position) {
-             latitude  = position.coords.latitude;
-             longitude = position.coords.longitude;
-  }
+            // latitude  = position.coords.latitude;
+            // longitude = position.coords.longitude;
+          		var lat = '';
+		          var long = '';
+              lat  = position.coords.latitude;
+              long = position.coords.longitude;
+		          var coordi = { "lat" : lat,"long" : long};
+             }
   
-     navigator.geolocation.getCurrentPosition(success123, error);
- }
+           navigator.geolocation.getCurrentPosition(success123, error);
+        }
         // Event handler called when the chatbot ui is ready to receive the
         // dynamic config.
         // Send dynamic config/parameter (e.g. username, geolocation) to the
@@ -90,15 +98,14 @@
           // values here will override the ones in the JSON config
           //      coords: 'welcome tushar',
           geoFindMe();
+          var myJSON = JSON.stringify(coordi);
+          document.getElementById("demo").innerHTML = myJSON ;
           var config = {
             iframeConfig: {
               lex: {
                 sessionAttributes: {
                   userAgent: navigator.userAgent,
-                  coords:{
-                              lat: latitude,
-                              long: longitude
-                         },
+                  coords: myJSON                         
                 },
               },
             },
