@@ -42,6 +42,8 @@
      <h6>latitude and longitude are </h6>
      <p id="lat"></p>
      <p id="lng"></p>
+    <h6>Username is </h6>
+    <p id="user"></p>
     <!-- loader script -->
     <script src="./bot-loader.js"></script>
     <!-- jquery -->
@@ -86,12 +88,34 @@
         console.info('coordinates', coords);
 	    	var test = JSON.stringify(coords);
 		    document.getElementById("demo").innerHTML = test;
-              var config = {
+        
+        //function to get username
+                let user = getParameter('user');
+		           document.getElementById("user").innerHTML = user;
+		                       function getParameter(theParameter) { 
+                              var params = window.location.search.substr(1).split('&');
+ 
+                                 for (var i = 0; i < params.length; i++) {
+                                 var p=params[i].split('=');
+	                               if (p[0] == theParameter) {
+	                               let x= decodeURIComponent(p[1]);
+	                               if(x == ''){
+	                                 return false;
+	                                    }    
+	                               return x;    
+	                                 }
+                                 }
+                              return false;
+                             }
+        
+        
+         var config = {
             iframeConfig: {
               lex: {
                 sessionAttributes: {
                   userAgent: navigator.userAgent,
-                  coords: test                         
+                  coords: test,
+                  username: user
                 },
               },
             },
@@ -105,11 +129,32 @@
       },
       function onCoordinatesRejected(err) {
         console.warn('failed to obtain coordinates - ', err);
+        
+                //function to get username
+                let user = getParameter('user');
+		           document.getElementById("user").innerHTML = user;
+		                       function getParameter(theParameter) { 
+                              var params = window.location.search.substr(1).split('&');
+ 
+                                 for (var i = 0; i < params.length; i++) {
+                                 var p=params[i].split('=');
+	                               if (p[0] == theParameter) {
+	                               let x= decodeURIComponent(p[1]);
+	                               if(x == ''){
+	                                 return false;
+	                                    }    
+	                               return x;    
+	                                 }
+                                 }
+                              return false;
+                             }
+        
           var config = {
             iframeConfig: {
               lex: {
                 sessionAttributes: {
                   userAgent: navigator.userAgent,
+                  username: user,
                   coords: { lat: null, lng: null }                        
                 },
               },
@@ -123,11 +168,32 @@
         return { lat: null, lng: null };
       }
     ).catch(function (err) {
+    
+                    //function to get username
+                let user = getParameter('user');
+		           document.getElementById("user").innerHTML = user;
+		                       function getParameter(theParameter) { 
+                              var params = window.location.search.substr(1).split('&');
+ 
+                                 for (var i = 0; i < params.length; i++) {
+                                 var p=params[i].split('=');
+	                               if (p[0] == theParameter) {
+	                               let x= decodeURIComponent(p[1]);
+	                               if(x == ''){
+	                                 return false;
+	                                    }    
+	                               return x;    
+	                                 }
+                                 }
+                              return false;
+                             } 
+    
       var config = {
             iframeConfig: {
               lex: {
                 sessionAttributes: {
                   userAgent: navigator.userAgent,
+                  username: user,
                   coords: { lat: null, lng: null }                        
                 },
               },
